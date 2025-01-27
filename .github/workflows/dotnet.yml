@@ -1,7 +1,5 @@
 # This workflow builds and packages a .NET project.
-# For more information, see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET Build and Publish
+name: .NET
 
 on:
   workflow_dispatch:
@@ -12,30 +10,18 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
     - name: Restore dependencies
       run: dotnet restore
-
     - name: Build
-      run: dotnet build --no-restore --configuration Release
-
-    - name: Package DLL
-      run: |
-        mkdir -p output
-        cp **/bin/Release/*.dll output/
-        zip -r compiled-dll.zip output/
-
-    - name: Upload DLL as Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: compiled-dll
-        path: compiled-dll.zip
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
