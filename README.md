@@ -3,11 +3,9 @@ Prep for Matlab:
 - Add the release compiled dll into your workfolder
 - Add the following lines at the top of your script:
 
-"
-
-%NET interop preperations
-dotnetenv('core'); 
-dllPath=strcat(pwd,'\NetlistEditor.dll');
-NET.addAssembly(dllPath);
-
+"  
+%NET interop preperations  
+dotnetenv('core');  
+dllPath=strcat(pwd,'\NetlistEditor.dll');  
+NET.addAssembly(dllPath);  
 "
