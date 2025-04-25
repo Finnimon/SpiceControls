@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Spice.Controls.Core\Spice.Controls.Core.csproj" />
+  </ItemGroup>
+</Project>

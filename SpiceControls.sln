@@ -5,6 +5,17 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetlistEditor", "NetlistEditor\NetlistEditor\NetlistEditor.csproj", "{6BC114DB-F549-43C3-8C75-F9821F397F5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Raw", "Spice.Controls.Raw\Spice.Controls.Raw.csproj", "{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Core", "Spice.Controls.Core\Spice.Controls.Core.csproj", "{149A2007-E9A4-47DE-87A1-46952A80CDEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Netlist", "Spice.Controls.Netlist\Spice.Controls.Netlist.csproj", "{72879E8A-7099-4EFE-AF94-7993115BAB52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleFiles", "SampleFiles", "{D45FC169-0440-4A76-9159-2A31EAE9886D}"
+	ProjectSection(SolutionItems) = preProject
+		SampleFiles\B6_HSS.log.raw = SampleFiles\B6_HSS.log.raw
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +32,30 @@ Global
 		{6BC114DB-F549-43C3-8C75-F9821F397F5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BC114DB-F549-43C3-8C75-F9821F397F5B}.Release|x64.ActiveCfg = Release|x64
 		{6BC114DB-F549-43C3-8C75-F9821F397F5B}.Release|x64.Build.0 = Release|x64
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Debug|x64.Build.0 = Debug|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D03C9FF-06C0-46AE-BC57-40DC3D4D1752}.Release|x64.Build.0 = Release|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Debug|x64.Build.0 = Debug|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Release|x64.ActiveCfg = Release|Any CPU
+		{149A2007-E9A4-47DE-87A1-46952A80CDEB}.Release|x64.Build.0 = Release|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Debug|x64.Build.0 = Debug|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Release|x64.ActiveCfg = Release|Any CPU
+		{72879E8A-7099-4EFE-AF94-7993115BAB52}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
