@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Spice.Controls.Core;
+﻿namespace Spice.Controls.Core;
 
 public static class Function
 {

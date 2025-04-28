@@ -1,17 +1,24 @@
+using System.Runtime.CompilerServices;
+
 namespace Spice.Controls.Core;
 
 public static class ListExt
 {
-    public static int? FindIndex<T, TList>(this TList list, T find)
-    where TList : IList<T>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    public static bool EndsWith<T>(this IList<T> list,IList<T> other)
     {
-        for (var i = 0; i < list.Count; i++)
+        if(other.Count>list.Count) return false;
+        var otherI = other.Count;
+        var until=list.Count-other.Count;
+        for (var i = list.Count - 1; i >= until; i--)
         {
-            var item = list[i];
-            if(item is null&&find is null) return i;
-            if(item is null) continue;
-            if (item.Equals(find)) return i;
+            otherI--;
+            var item=list[i];
+            var otherItem = other[otherI];
+            if(item is null && otherItem is null) continue;
+            if(item is null) return false;
+            if(!item.Equals(otherItem)) return false;
         }
-        return null;
+        return true;
     }
 }

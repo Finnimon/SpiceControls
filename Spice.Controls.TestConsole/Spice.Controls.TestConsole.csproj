@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Spice.Controls.Core\Spice.Controls.Core.csproj" />
+      <ProjectReference Include="..\Spice.Controls.Netlist\Spice.Controls.Netlist.csproj" />
+      <ProjectReference Include="..\Spice.Controls.Raw\Spice.Controls.Raw.csproj" />
+    </ItemGroup>
+
+</Project>

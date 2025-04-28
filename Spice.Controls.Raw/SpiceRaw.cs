@@ -1,9 +1,11 @@
+using Spice.Controls.Netlist;
+
 namespace Spice.Controls.Raw;
 
-public sealed record SpiceRaw(SpiceRun[] Steps);
+public sealed record SpiceRaw(SpiceRun[] Runs);
 
 public sealed record SpiceRun(
-    SpiceParam[] Params, 
+    NetlistParameter[] Params, 
     long[] Time, 
-    IReadOnlyDictionary<string,double> Data);
-public sealed record SpiceParam(string Id, string Value);
+    IReadOnlyDictionary<string,double> Data
+);
