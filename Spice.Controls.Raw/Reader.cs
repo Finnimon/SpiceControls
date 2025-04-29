@@ -4,11 +4,19 @@ namespace Spice.Controls.Raw;
 
 public static class Reader
 {
-    public static SpiceRawHeader ReadHeader(string file)
+    #region Read SpiceRaw
+
+    public static SpiceRaw ReadSpiceRaw(string file)
     {
-        using var reader=File.OpenRead(file);
-        return ReadHeader(reader);
+        var raw=File.OpenRead(file);
+        var header=ReadHeader(raw);
+        var (time, measurements) = ReadBody(raw, header);
+        return new SpiceRaw(header,time,measurements);
     }
+
+    #endregion
+    #region Read Header
+   
     private static SpiceRawHeader ReadHeader(FileStream file)
     {
         file.Seek(0, SeekOrigin.Begin);
@@ -48,4 +56,46 @@ public static class Reader
         }
         return measurements.ToArray();
     }
+
+    #endregion
+    #region Read Body
+
+    private static (ulong[] time, Dictionary<SpiceMeasurement, float[]> measurements) ReadBody(FileStream raw, SpiceRawHeader header)
+    {
+        var (time, measurementValues) = ReadBinary(raw, header);
+        Dictionary<SpiceMeasurement, float[]> measurements = [];
+        for (var i = 0; i < header.Measurements.Length-1; i++)
+        {
+            var meas = header.Measurements[i+1];
+            measurements[meas] = measurementValues[i];
+        }
+        return (time, measurements);
+    }
+    
+    private static (ulong[] time, List<float[]> measurements) ReadBinary(FileStream raw, SpiceRawHeader header)
+    {
+        raw.Seek(header.BinaryDataOffset, SeekOrigin.Begin);
+        var numberOfFloats = header.Measurements.Length - 1;
+        var chunkSize = sizeof(float) * numberOfFloats + sizeof(ulong);
+        var chunks=raw.ReadChunky(chunkSize, header.NumberOfPoints);
+        var time = new ulong[header.NumberOfPoints];
+        List<float[]> floats = [];
+        for (var i = 0; i < numberOfFloats; i++)
+            floats.Add(new float[header.NumberOfPoints]);
+        var position = -1;
+        foreach (var chunk in chunks)
+        {
+            position++;
+            time[position]= BitConverter.ToUInt64(chunk);
+            for (var i = 0; i < numberOfFloats; i++)
+            {
+                var startIndex=sizeof(long)+sizeof(float)*i;
+                floats[i][position] = BitConverter.ToSingle(chunk,startIndex);
+            }
+        }
+
+        return (time, floats);
+    }
+    
+    #endregion
 }
