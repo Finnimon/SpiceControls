@@ -1,3 +1,4 @@
+using System.Globalization;
 using Spice.Controls.Core;
 
 namespace Spice.Controls.Raw;
@@ -17,7 +18,7 @@ public static class Reader
     #endregion
     #region Read Header
    
-    private static SpiceRawHeader ReadHeader(FileStream file)
+    public static SpiceRawHeader ReadHeader(FileStream file)
     {
         file.Seek(0, SeekOrigin.Begin);
         var firstIsZero = file.ReadByte() == 0;
@@ -27,16 +28,29 @@ public static class Reader
         var headerStr= file.ReadUntilFound("Binary:\n",isUtf16,secondIsZero);
         var binaryDataOffset = headerStr.Length;
         if (isUtf16) binaryDataOffset *= 2;
-        var title=new StringReader(headerStr).ReadLine()?["Title: * ".Length..]??"Unknown";
-        return new SpiceRawHeader(title,ExtractMeasurements(headerStr,out var numberOfPoints),numberOfPoints,binaryDataOffset,headerStr);
+        var binaryPosition = new FilePosition(binaryDataOffset, file.Length-binaryDataOffset);
+        headerStr = headerStr.Replace('\t', ' ');
+        var lines=headerStr.Split('\n',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries);
+        
+        const string dateTimeFormat = "ddd MMM dd HH:mm:ss yyyy";
+        
+        var title = lines[0]["Title: * ".Length..];
+        var date = DateTime.ParseExact(ExtractHeaderLineValue(lines, "Date:"),format:dateTimeFormat,CultureInfo.InvariantCulture);
+        var plotname=ExtractHeaderLineValue(lines,"Plotname:");
+        var flags=ExtractHeaderLineValue(lines, "Flags:").Split(' ');
+        var noPoints = int.Parse(ExtractHeaderLineValue(lines,"No. Points:"));
+        var noVars=int.Parse(ExtractHeaderLineValue(lines,"No. Variables:"));
+        var offset=double.Parse(ExtractHeaderLineValue(lines,"Offset:"));
+        var command=ExtractHeaderLineValue(lines,"Command:");
+        
+        var measurements = ExtractVariables(lines, noVars);
+
+        var variables = measurements.ToArray();
+        return new SpiceRawHeader(title,date,plotname,flags,noVars,noPoints,offset,command,variables,binaryPosition,headerStr);
     }
 
-    private static SpiceMeasurement[] ExtractMeasurements(string entireHeader, out int numberOfPoints)
+    private static List<SpiceMeasurement> ExtractVariables(string[] lines, int noVars)
     {
-        entireHeader = entireHeader.Replace('\t', ' ');
-        var lines=entireHeader.Split('\n',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries);
-        numberOfPoints=int.Parse(lines.First(x => x.StartsWith("No. Points:"))["No. Points:".Length..].Trim());
-        var noVars=int.Parse(lines.First(x=>x.StartsWith("No. Variables:"))["No. Variables:".Length..].Trim());
         var firstVarIndex=lines.TakeWhile(x=>!x.StartsWith("Variables:")).Count()+2;
         List<SpiceMeasurement> measurements = [new("time",Unit.NanoSecond)];
         noVars--;
@@ -51,33 +65,37 @@ public static class Reader
                 'I' => Unit.Ampere,
                 _ => throw new NotSupportedException($"ElectricUnit {relevant[0]} not implemented."),
             };
-            var name=relevant.Substring(2,relevant.Length-2);
+            var name=relevant.Substring(2,relevant.Length-3);
             measurements.Add(new SpiceMeasurement(name,unit));
         }
-        return measurements.ToArray();
+
+        return measurements;
     }
+
+    private static string ExtractHeaderLineValue(IEnumerable<string> headerLines, string startsWith) 
+        => headerLines.First(x => x.StartsWith(startsWith))[startsWith.Length..].Trim();
 
     #endregion
     #region Read Body
 
-    private static (ulong[] time, Dictionary<SpiceMeasurement, float[]> measurements) ReadBody(FileStream raw, SpiceRawHeader header)
+    public static (ulong[] time, Dictionary<string, float[]> measurements) ReadBody(FileStream raw, SpiceRawHeader header)
     {
         var (time, measurementValues) = ReadBinary(raw, header);
-        Dictionary<SpiceMeasurement, float[]> measurements = [];
-        for (var i = 0; i < header.Measurements.Length-1; i++)
+        Dictionary<string, float[]> measurements = [];
+        for (var i = 1; i < header.Variables.Length; i++)
         {
-            var meas = header.Measurements[i+1];
-            measurements[meas] = measurementValues[i];
+            var id = header.Variables[i].Id;
+            measurements[id] = measurementValues[i-1];
         }
         return (time, measurements);
     }
     
     private static (ulong[] time, List<float[]> measurements) ReadBinary(FileStream raw, SpiceRawHeader header)
     {
-        raw.Seek(header.BinaryDataOffset, SeekOrigin.Begin);
-        var numberOfFloats = header.Measurements.Length - 1;
+        var numberOfFloats = header.Variables.Length - 1;
         var chunkSize = sizeof(float) * numberOfFloats + sizeof(ulong);
-        var chunks=raw.ReadChunky(chunkSize, header.NumberOfPoints);
+        var chunks=raw.ReadChunky(header.BinaryDataPosition,chunkSize);
+        
         var time = new ulong[header.NumberOfPoints];
         List<float[]> floats = [];
         for (var i = 0; i < numberOfFloats; i++)

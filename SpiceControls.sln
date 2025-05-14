@@ -11,12 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Core", "Spic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Netlist", "Spice.Controls.Netlist\Spice.Controls.Netlist.csproj", "{72879E8A-7099-4EFE-AF94-7993115BAB52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleFiles", "SampleFiles", "{D45FC169-0440-4A76-9159-2A31EAE9886D}"
-	ProjectSection(SolutionItems) = preProject
-		SampleFiles\B6_HSS.log.raw = SampleFiles\B6_HSS.log.raw
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.TestConsole", "Spice.Controls.TestConsole\Spice.Controls.TestConsole.csproj", "{EACE8FCE-A10E-4A93-8AA5-5FB3329C191A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.Controls.Raw.Tests", "Spice.Controls.Raw.Tests\Spice.Controls.Raw.Tests.csproj", "{DEBD271F-9951-4BA6-8902-3725014504DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +63,14 @@ Global
 		{EACE8FCE-A10E-4A93-8AA5-5FB3329C191A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EACE8FCE-A10E-4A93-8AA5-5FB3329C191A}.Release|x64.ActiveCfg = Release|Any CPU
 		{EACE8FCE-A10E-4A93-8AA5-5FB3329C191A}.Release|x64.Build.0 = Release|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{DEBD271F-9951-4BA6-8902-3725014504DB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

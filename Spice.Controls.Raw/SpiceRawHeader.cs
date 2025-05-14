@@ -1,9 +1,17 @@
+using Spice.Controls.Core;
+
 namespace Spice.Controls.Raw;
 
 public sealed record SpiceRawHeader(
     string Title,
-    SpiceMeasurement[] Measurements,
+    DateTime Date,
+    string PlotName,
+    string[] Flags,
+    int NumberOfVariables,
     int NumberOfPoints,
-    long BinaryDataOffset,
+    double Offset,
+    string Command,
+    SpiceMeasurement[] Variables,
+    FilePosition BinaryDataPosition,
     string OriginalHeader
 );
