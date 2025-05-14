@@ -1,7 +1,9 @@
-using System.Text.Json;
+//using System.Globalization;
+//using System.Text.Json;
 
 var file = Console.ReadLine() ?? throw new PlatformNotSupportedException();
-
-var ser = new JsonSerializerOptions { WriteIndented = true };
 var raw = Spice.Controls.Raw.Reader.ReadSpiceRaw(file);
-Console.WriteLine(JsonSerializer.Serialize(raw.Header));
+
+Console.WriteLine(raw.Header.OriginalHeader);
+
+return 0;

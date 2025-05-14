@@ -4,7 +4,8 @@ namespace Spice.Controls.Raw;
 
 public sealed record SpiceRaw(
     SpiceRawHeader Header, 
-    ulong[] Time, 
+    double[] Time, 
     Dictionary<string, float[]> Measurements);
+
 
 

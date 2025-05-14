@@ -47,11 +47,11 @@ public static class FileStreamExt
         return me.ReadChunky(chunkSize, count);
     }
     
-    private sealed class ReadUntilFoundHelper(FileStream reader,bool littleEndian,bool utf16)
+    private sealed class ReadUntilFoundHelper(FileStream reader,bool bigEndian,bool utf16)
     {
         private byte[] Buffer { get; } = [0, 0];
-        private readonly int _firstPos = littleEndian ? 0 : 1;
-        private readonly int _secondPos = littleEndian ? 1 : 0;
+        private readonly int _firstPos = bigEndian ? 0 : 1;
+        private readonly int _secondPos = bigEndian ? 1 : 0;
 
         public byte First
         {
@@ -75,34 +75,18 @@ public static class FileStreamExt
         }
     }
 
-    public static string ReadUntilFound(this FileStream me, string match, bool isUtf16, bool littleEndian,
-        int matchCount = 1)
+
+    public static string ReadUntilFound(this FileStream me, string match, Encoding encoding, bool utf16=true)
     {
-        if (matchCount < 1) throw new ArgumentOutOfRangeException(nameof(matchCount), matchCount, "Must be >1");
-        var matchLength = match.Length;
         var matchArray = match.ToCharArray();
-        if (matchLength == 0)
-            throw new ArgumentOutOfRangeException(nameof(match), $"Length==0\r\nMissing {matchLength} chunks");
-        var matchTargetCount = matchCount;
+        using var binary = new BinaryReader(me,encoding,true);
         List<char> result = [];
-        var helper = new ReadUntilFoundHelper(me,littleEndian,isUtf16);
-        while (matchCount > 0)
+
+        while (!result.EndsWith(matchArray))
         {
-            var read = helper.GetNextChar();
-            if (read is null) break;
-            
-            result.Add(read.Value);
-            var resultCount = result.Count;
-            if (resultCount < matchLength) continue;
-
-            var found = result.EndsWith(matchArray);
-            if (found) matchCount--;
+            var readChar = utf16?(char)binary.ReadUInt16():binary.ReadChar();//explicitly utf16
+            result.Add(readChar);
         }
-
-        if (matchCount != 0)
-            throw new ArgumentException(
-                $"{match} not found\nFound total:{matchTargetCount - matchCount}\nMissing: {matchCount}");
-
         return new string([..result]);
     }
 }
